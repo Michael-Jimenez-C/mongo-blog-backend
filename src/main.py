@@ -1,18 +1,26 @@
 from fastapi import FastAPI
-from dotenv import load_dotenv
-
-load_dotenv()
+from models import User, UserPreferences, UserSaved, UserReactions, Post, Comment
+from query import registerUser, getUserByUsername
 
 app = FastAPI()
 
 @app.get("/health")
-def health_check():
+async def health_check():
     return {"status": "ok"}
 
-@app.get("user/{user_id}")
-def getusers(username: str):
+@app.post("/validate")
+async def validate():
     pass
 
-@app.post("validate")
-def validate():
-    pass
+
+@app.get("/user/{username}", response_model=User | None)
+async def getusers(username: str):
+    user = getUserByUsername(username)
+    if user:
+        return user
+    return None
+
+@app.post("/user/add/",response_model=bool)
+async def adduser(user: User):
+    userdb = registerUser(user)
+    return userdb==True
