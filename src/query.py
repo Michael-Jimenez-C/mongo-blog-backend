@@ -1,8 +1,8 @@
 from pymongo import MongoClient
-from models import User, UserPreferences, UserSaved, UserReactions, Post, Comment
-import os
+from models import User, UserPreferences, UserSaved, UserReactions, Post, Comment, UserLogin
 import hashlib
 from dotenv import load_dotenv
+import os
 
 load_dotenv()
 
@@ -40,4 +40,15 @@ def registerUser(user: User):
     user_ = collection.insert_one(userdb)
     if user_.acknowledged:
         return True
+    return False
+
+def login(user: UserLogin):
+    if not client:
+        return False
+    db = client['blogapp']
+    collection = db['users']
+    user.password = hashlib.sha256(bytes(user.password,'utf-8')).hexdigest()
+    user_ = collection.find_one({'username':user.username,'password':user.password})
+    if user_:
+        return {'username':user_['username']}
     return False
