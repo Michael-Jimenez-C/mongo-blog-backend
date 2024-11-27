@@ -1,5 +1,6 @@
-from types import NoneType
+from odmantic import Model
 from pydantic import BaseModel
+from odmantic import Field, Index
 from datetime import datetime
 
 class Token(BaseModel):
@@ -9,31 +10,39 @@ class Token(BaseModel):
 class UserName(BaseModel):
     username: str
 
-class User(BaseModel):
-    firstname: str
-    lastname: str
-    image: str | None = None
-    username: str
-    email: str
-    password: str
-
 class UserLogin(BaseModel):
     username: str
     password: str
 
-class UserPreferences(BaseModel):
+#DB Schema
+
+class User(Model):
+    firstname: str
+    lastname: str
+    image: str | None = None
+    username: str = Field(index = True, unique = True)
+    email: str = Field(index = True, unique = True)
+    password: str
+
+    model_config = {
+            "indexes": lambda: [
+                Index(User.username, User.email, unique=True),
+            ]
+    }
+
+class UserPreferences(Model):
     theme: str
 
-class UserSaved(BaseModel):
+class UserSaved(Model):
     user: str
     post: list
 
-class UserReactions(BaseModel):
+class UserReactions(Model):
     user: str
     post: str
     reaction: str
 
-class Post(BaseModel):
+class Post(Model):
     user: str
     title: str
     content: str
@@ -43,7 +52,7 @@ class Post(BaseModel):
     date: datetime
     tags: list
 
-class Comment(BaseModel):
+class Comment(Model):
     user: str
     post: str
     content: str

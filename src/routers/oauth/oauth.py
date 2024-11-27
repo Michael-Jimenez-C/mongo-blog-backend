@@ -29,11 +29,11 @@ async def get_current_user(token: Annotated[str, Depends(oauth2_scheme)]):
 async def validate(
     current_user: Annotated[UserName, Depends(get_current_user)],
 ):
-    return current_user.username
+    return current_user
 
 @router.post("/token")
 async def auth(data: Annotated[OAuth2PasswordRequestForm, Depends()]) -> Token:
-    user = login(UserLogin(username=data.username,password=data.password))
+    user = await login(UserLogin(username=data.username,password=data.password))
     if not user:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
