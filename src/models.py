@@ -26,12 +26,10 @@ class User(Model):
 
     model_config = {
             "indexes": lambda: [
-                Index(User.username, User.email, unique=True),
+                Index(User.username, unique=True),
+                Index(User.email, unique=True),
             ]
     }
-
-class UserPreferences(Model):
-    theme: str
 
 class UserSaved(Model):
     user: str
@@ -57,3 +55,7 @@ class Comment(Model):
     post: str
     content: str
     date: datetime
+
+
+
+DBMODEL = [User, UserSaved, UserReactions, Post, Comment]

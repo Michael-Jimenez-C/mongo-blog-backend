@@ -1,4 +1,4 @@
-from models import User, UserPreferences, UserSaved, UserReactions, Post, Comment, UserLogin
+from models import User, UserSaved, UserReactions, Post, Comment, UserLogin
 import hashlib
 from odmantic.exceptions import DuplicateKeyError
 from engine import Engine
