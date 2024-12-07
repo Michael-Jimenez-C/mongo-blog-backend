@@ -2,3 +2,4 @@ pyproject.toml
 .venv/
 __pycache__/
 src/.env
+.ropeproject

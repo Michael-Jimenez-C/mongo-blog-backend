@@ -19,10 +19,9 @@ async def get_current_user(token: Annotated[str, Depends(oauth2_scheme)]):
         headers={"WWW-Authenticate": "Bearer"},
     )
     payload = decodeToken(token)
-    print(payload)
     if not payload:
         raise credencials_exception
-    return payload
+    return UserName(**payload)
 
 
 @router.get("/validate")
