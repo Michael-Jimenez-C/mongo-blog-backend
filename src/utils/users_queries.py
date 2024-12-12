@@ -1,4 +1,4 @@
-from models import User, UserName, UserSaved, UserReactions, Post, Comment, UserLogin, PasswordChange, ChangeEmail, ChangeUserInformation
+from models import User, UserName, UserSaved, UserReactions, Post, Comment, UserLogin, PasswordChange, ChangeEmail, ChangeUserInformation, UserPreferences
 import hashlib
 from odmantic.exceptions import DuplicateKeyError
 from engine import Engine
@@ -12,9 +12,6 @@ async def getUserByEmail(email: str):
     return user
 
 async def registerUser(user: User):
-    if await getUserByUsername(user.username) or await getUserByEmail(user.email):
-        return False
-
     user.password = hashlib.sha256(bytes(user.password,'utf-8')).hexdigest()
     user_ = None
     try:
@@ -62,6 +59,22 @@ async def changeEmail(user: UserName, email: ChangeEmail):
     if user_:
         return False
     userdb.email = email.email
+    await Engine.save(userdb)
+    return True
+
+async def changeUserPreferences(user: UserName, preferences: UserPreferences):
+    userdb = await getUserByUsername(user.username)
+    if not userdb:
+        return False
+    userdb.settings = preferences
+    await Engine.save(userdb)
+    return True
+
+async def changeUserInformation(user: UserName, information: ChangeUserInformation):
+    userdb = await getUserByUsername(user.username)
+    if not userdb:
+        return False
+    userdb.model_update(information)
     await Engine.save(userdb)
     return True
 
