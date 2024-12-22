@@ -1,9 +1,8 @@
 from fastapi import APIRouter, Depends
 from models import User, Comment
 from odmantic import ObjectId
-from utils.comments_queries import createComment, deleteComment, updateComment, getCommentsByPostId, getCommentsByUser, getCommentById
+from utils.comments_queries import createComment, deleteComment, updateComment, getCommentsByPostId, getCommentsByUser
 from .oauth.oauth import get_current_user
-from typing_extensions import Annotated
 
 router = APIRouter(
     tags=["Comments"],
