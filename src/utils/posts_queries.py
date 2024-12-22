@@ -1,4 +1,4 @@
-from models import User, Post
+from models import Post
 from odmantic import ObjectId
 from engine import Engine
 
