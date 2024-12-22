@@ -3,7 +3,7 @@ from typing_extensions import Annotated
 from .jwt_func import decodeToken, createToken
 from fastapi.security import OAuth2PasswordBearer,OAuth2PasswordRequestForm
 from fastapi import Depends, status, APIRouter
-from query import login
+from utils.users_queries import login
 from models import Token, UserLogin, UserName
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")

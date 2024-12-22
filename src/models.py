@@ -77,7 +77,6 @@ class UserReactions(Model):
     }
 
 class Post(Model):
-    post: str = Field(index = True, unique = True)
     user: str = Field(index = True, unique = True)
     title: str = Field(index = True)
     content: str
@@ -88,7 +87,6 @@ class Post(Model):
     tags: list
     model_config = {
             "indexes": lambda: [
-                Index(Post.post, unique = True),
                 Index(Post.user),
                 Index(Post.title)
             ]
