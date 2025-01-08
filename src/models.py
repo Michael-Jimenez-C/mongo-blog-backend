@@ -42,9 +42,9 @@ class UserPreferences(EmbeddedModel):
 class User(Model):
     firstname: str
     lastname: str
-    image: str | None = None
+    image: str
     username: str = Field(index = True, unique = True)
-    display_name: str | None = None
+    display_name: str
     email: str = Field(index = True, unique = True)
     birth_date: datetime
     password: str
