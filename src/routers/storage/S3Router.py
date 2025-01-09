@@ -1,4 +1,4 @@
-from fastapi import APIRouter,File, UploadFile, Depends, HTTPException
+from fastapi import APIRouter,File,Form, UploadFile, Depends, HTTPException
 from models import User
 from routers.oauth.oauth import get_current_user
 from storage.s3actions import uploadImage
@@ -20,4 +20,3 @@ async def uploadUserPicture(file: UploadFile = File(...),user: User = Depends(ge
         return {"message":"Profile picture Changed", "url":file_url}
     except Exception as e:
         raise HTTPException(status_code=500, detail = str(e))
-

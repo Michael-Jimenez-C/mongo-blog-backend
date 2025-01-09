@@ -74,7 +74,7 @@ class UserReactions(Model):
     }
 
 class Post(Model):
-    user: str = Field(index = True, unique = True)
+    user: str = Field(index = True)
     title: str = Field(index = True)
     content: str
     image: str
@@ -85,13 +85,14 @@ class Post(Model):
     model_config = {
             "indexes": lambda: [
                 Index(Post.user),
-                Index(Post.title)
+                Index(Post.title),
+                Index(Post.user, Post.title, unique = True)
             ]
     }
 
 class Comment(Model):
     user: str
-    post: str = Field(index = True, unique = True)
+    post: str = Field(index = True)
     content: str
     date: datetime
     model_config = {
