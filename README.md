@@ -87,3 +87,8 @@ Correr
 fastapi run src/main.py
 ```
 
+Docker
+
+```sh
+docker run -p 5000:8000 -e "MONGO_URI=url" -e "ADMIN_PSSWD=123456" -e "S3ENDPOINT=url" -e "S3USER=admin" -e "S3PASSWORD=password123" mongo-blog-backend
+```
