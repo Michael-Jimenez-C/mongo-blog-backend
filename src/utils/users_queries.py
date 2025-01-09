@@ -78,6 +78,14 @@ async def changeUserInformation(user: UserName, information: ChangeUserInformati
     await Engine.save(userdb)
     return True
 
+async def changeUserImage(user: UserName, image: str):
+    userdb = await getUserByUsername(user.username)
+    if not userdb:
+        return False
+    userdb.image = image
+    await Engine.save(userdb)
+    return True
+
 async def login(user: UserLogin):
     user.password = hashlib.sha256(bytes(user.password,'utf-8')).hexdigest()
     user_ = await Engine.find_one(User, (User.username == user.username) & (User.password == user.password))

@@ -27,9 +27,6 @@ class ChangeUserInformation(BaseModel):
     lastname: str
     birth_date: datetime
     display_name: str | None = None
-    image: str | None = None
-
-
 
 #DB Schema
 
