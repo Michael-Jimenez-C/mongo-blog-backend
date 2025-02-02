@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends
 from odmantic import ObjectId
 from models import User, UserName, Post
 from .oauth.oauth import get_current_user
-from utils.posts_queries import getPostsByUser, addPost, delPost
+from utils.posts_queries import getPostsByUser, addPost, delPost, getPosts
 
 import os
 if os.environ.get('USE_ARTICLE_S3'):
@@ -14,8 +14,13 @@ router = APIRouter(
 )
 
 @router.get('/posts')
-async def getPosts(user: str, page: int = 0, limit: int = 20):
+async def getUserPosts(user: str, page: int = 0, limit: int = 20):
     r = await getPostsByUser(user, page, limit)
+    return r
+
+@router.get('/all')
+async def getAllPosts(page: int = 0, limit: int = 20):
+    r = await getPosts(page, limit)
     return r
 
 @router.post('/add')

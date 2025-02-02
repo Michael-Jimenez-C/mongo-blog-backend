@@ -6,7 +6,13 @@ async def getPostByID(post_id: ObjectId) -> Post | None:
     post = await Engine.find_one(Post, Post._id == post_id)
     return post
 
-async def getPostsByUser(user: str, page=0, limit:int = 20) -> list[Post]:
+async def getPosts(page:int=0, limit:int = 20) -> list[Post]:
+    if page < 0 or limit < 0:
+        return []
+    posts = await Engine.find(Post, limit=limit, skip=page*limit)
+    return posts
+
+async def getPostsByUser(user: str, page:int=0, limit:int = 20) -> list[Post]:
     if page < 0 or limit < 0:
         return []
     posts = await Engine.find(Post, Post.user == user, limit=limit, skip=page*limit)
