@@ -1,4 +1,5 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException,status
+from fastapi.responses import JSONResponse
 from models import User, UserName, PasswordChange, ChangeEmail, ChangeUserInformation, UserPreferences
 from utils.users_queries import registerUser, removeUser, changePassword, changeEmail, changeUserInformation, changeUserPreferences
 from .oauth.oauth import get_current_user
@@ -11,8 +12,11 @@ router = APIRouter(
 
 @router.post("/add/",response_model=bool)
 async def addUser(user: User):
-    userdb = await registerUser(user)
-    return userdb==True
+    r = await registerUser(user)
+    return JSONResponse(
+        status_code=200,
+        content={"message": r}
+        )
 
 @router.delete("/deleteAcount",response_model=bool)
 async def deleteAcount(current_user: Annotated[UserName, Depends(get_current_user)]):

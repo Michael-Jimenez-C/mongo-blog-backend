@@ -12,15 +12,25 @@ async def getUserByEmail(email: str):
     return user
 
 async def registerUser(user: User):
+    userdb = await getUserByEmail(user.email)
+    message = ""
+    if userdb:
+        message = "Email on use"
+        return message
+    userdb = await getUserByUsername(user.username)
+    if userdb:
+        message = "Username on use"
+        return message
     user.password = hashlib.sha256(bytes(user.password,'utf-8')).hexdigest()
     user_ = None
     try:
         user_ = await Engine.save(user)
-    except DuplicateKeyError:
-        return False
-    if user_:
-        return True
-    return False
+        if user_:
+            message = "User created"
+    except DuplicateKeyError as e:
+        message = "User already exists"
+    
+    return message
 
 async def removeUser(username:str):
     try:
@@ -88,7 +98,7 @@ async def changeUserImage(user: UserName, image: str):
 
 async def login(user: UserLogin):
     user.password = hashlib.sha256(bytes(user.password,'utf-8')).hexdigest()
-    user_ = await Engine.find_one(User, (User.username == user.username) & (User.password == user.password))
+    user_ = await Engine.find_one(User, (User.email == user.username) & (User.password == user.password))
     if user_:
         return {'username':user.username}
     return False

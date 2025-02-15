@@ -39,13 +39,13 @@ class UserPreferences(EmbeddedModel):
 class User(Model):
     firstname: str
     lastname: str
-    image: str
+    image: str = ''
     username: str = Field(index = True, unique = True)
     display_name: str
     email: str = Field(index = True, unique = True)
-    birth_date: datetime
+    birth_date: datetime = datetime.now()
     password: str
-    settings: UserPreferences
+    settings: UserPreferences = UserPreferences()
 
     model_config = {
             "indexes": lambda: [
