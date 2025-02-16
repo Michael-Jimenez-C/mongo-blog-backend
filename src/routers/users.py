@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException,status
 from fastapi.responses import JSONResponse
-from models import User, UserName, PasswordChange, ChangeEmail, ChangeUserInformation, UserPreferences
-from utils.users_queries import registerUser, removeUser, changePassword, changeEmail, changeUserInformation, changeUserPreferences
+from models import User, UserName, PrivateUser,PasswordChange, ChangeEmail, ChangeUserInformation, UserPreferences, PublicUser
+from utils.users_queries import registerUser, getUserByEmail, getUserByUsername, removeUser, changePassword, changeEmail, changeUserInformation, changeUserPreferences
 from .oauth.oauth import get_current_user
 from typing_extensions import Annotated
 
@@ -17,6 +17,16 @@ async def addUser(user: User):
         status_code=200,
         content={"message": r}
         )
+
+@router.get("/user/{username}",response_model=PublicUser | None)
+async def userInfo(username: str):
+    res = await getUserByUsername(username)
+    return res
+
+@router.get("/user",response_model=PrivateUser)
+async def privateUserInfo(current_user: Annotated[UserName, Depends(get_current_user)]):
+    res = await getUserByEmail(current_user.username)
+    return res
 
 @router.delete("/deleteAcount",response_model=bool)
 async def deleteAcount(current_user: Annotated[UserName, Depends(get_current_user)]):

@@ -10,8 +10,7 @@ class Token(BaseModel):
 class UserName(BaseModel):
     username: str
 
-class UserLogin(BaseModel):
-    username: str
+class UserLogin(UserName):
     password: str
 
 class PasswordChange(BaseModel):
@@ -101,5 +100,17 @@ class Comment(Model):
             ]
     }
 
+
+class PublicUser(Model):
+    image: str
+    display_name: str
+    username: str
+
+class PrivateUser(PublicUser):
+    firstname: str
+    lastname: str
+    email:str
+    birth_date: datetime
+    settings: UserPreferences
 
 DBMODEL = [User, UserSaved, UserReactions, Post, Comment]
